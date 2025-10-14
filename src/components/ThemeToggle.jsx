@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion';
-import { FiSun, FiMoon } from 'react-icons/fi';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Sun, Moon } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 
 const ThemeToggle = () => {
@@ -8,25 +8,36 @@ const ThemeToggle = () => {
   return (
     <motion.button
       onClick={toggleTheme}
-      className="fixed top-6 right-6 z-50 p-3 rounded-full bg-white dark:bg-gray-800 shadow-lg border border-gray-200 dark:border-gray-700"
-      whileHover={{ scale: 1.1 }}
+      className="relative p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+      whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       aria-label="Toggle theme"
     >
-      <motion.div
-        initial={false}
-        animate={{ rotate: isDark ? 0 : 180 }}
-        transition={{ duration: 0.3 }}
-      >
+      <AnimatePresence mode="wait" initial={false}>
         {isDark ? (
-          <FiSun className="w-6 h-6 text-yellow-500" />
+          <motion.div
+            key="sun"
+            initial={{ y: -20, opacity: 0, rotate: -90 }}
+            animate={{ y: 0, opacity: 1, rotate: 0 }}
+            exit={{ y: 20, opacity: 0, rotate: 90 }}
+            transition={{ duration: 0.2 }}
+          >
+            <Sun className="w-5 h-5 text-yellow-500" strokeWidth={2.5} />
+          </motion.div>
         ) : (
-          <FiMoon className="w-6 h-6 text-gray-700" />
+          <motion.div
+            key="moon"
+            initial={{ y: -20, opacity: 0, rotate: -90 }}
+            animate={{ y: 0, opacity: 1, rotate: 0 }}
+            exit={{ y: 20, opacity: 0, rotate: 90 }}
+            transition={{ duration: 0.2 }}
+          >
+            <Moon className="w-5 h-5 text-gray-700" strokeWidth={2.5} />
+          </motion.div>
         )}
-      </motion.div>
+      </AnimatePresence>
     </motion.button>
   );
 };
 
 export default ThemeToggle;
-
