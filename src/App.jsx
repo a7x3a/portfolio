@@ -14,8 +14,7 @@ function App() {
       <CursorFollower />
       <Navbar />
       
-      {/* Smooth scroll wrapper */}
-      <motion.div
+      <motion.main
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5 }}
@@ -25,8 +24,9 @@ function App() {
         <Skills />
         <Projects />
         <Contact />
-        <Footer />
-      </motion.div>
+      </motion.main>
+      
+      <Footer />
     </div>
   );
 }

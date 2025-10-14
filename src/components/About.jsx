@@ -36,7 +36,7 @@ const About = () => {
   ];
 
   return (
-    <section id="about" ref={ref} className="relative py-16 px-6 sm:py-20 md:py-32 bg-gray-50 dark:bg-gray-900/50 overflow-hidden">
+    <section id="about" ref={ref} className="relative py-16 px-6 sm:py-20 md:py-32 bg-gray-50 dark:bg-gray-900/50 overflow-hidden" aria-label="About section">
       {/* Parallax background */}
       <motion.div
         style={{ y }}
@@ -60,7 +60,7 @@ const About = () => {
           </h2>
         </motion.div>
         
-        <div className="grid md:grid-cols-2 gap-8 lg:gap-12 items-start">
+        <div className="grid md:grid-cols-2 gap-8 lg:gap-12 items-start text-center sm:text-start">
           {/* Text Content */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
@@ -95,10 +95,9 @@ const About = () => {
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.1 * index }}
+                transition={{ duration: 0.1, delay: 0.1 * index }}
                 viewport={{ once: true }}
-                whileHover={{ y: -4 }}
-                className="p-4 sm:p-5 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-600 transition-all"
+                className="p-4 sm:p-5 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-600 transition-all duration-200"
               >
                 <div className="flex items-center gap-3 sm:gap-4">
                   <div className={`p-2.5 sm:p-3 ${item.color} rounded-lg flex-shrink-0`}>
@@ -119,6 +118,11 @@ const About = () => {
               </motion.div>
             ))}
           </motion.div>
+        </div>
+
+        {/* Section Separator */}
+        <div className="mt-16 sm:mt-20 flex justify-center">
+          <div className="w-24 h-px bg-gray-300 dark:bg-gray-700 opacity-30" />
         </div>
       </div>
     </section>

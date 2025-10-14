@@ -5,8 +5,8 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   const socialLinks = [
-    { icon: Github, href: 'https://github.com', label: 'GitHub' },
-    { icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn' },
+    { icon: Github, href: 'https://github.com/a7x3a', label: 'GitHub' },
+    { icon: Linkedin, href: 'https://iq.linkedin.com/in/ahmadomar0', label: 'LinkedIn' },
     { icon: Mail, href: 'mailto:ahmadomar6511@gmail.com', label: 'Email' }
   ];
 
@@ -32,7 +32,7 @@ const Footer = () => {
   };
 
   return (
-    <footer className="relative bg-gradient-to-br from-gray-50 to-primary-50/20 dark:from-gray-900 dark:to-gray-900 border-t border-gray-200 dark:border-gray-800">
+    <footer className="relative bg-gradient-to-br from-gray-50 to-primary-50/20 dark:from-gray-900 dark:to-gray-900 border-t border-gray-200 dark:border-gray-800" aria-label="Footer section">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 max-w-7xl">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 sm:gap-12 mb-8">
           {/* Brand */}
@@ -50,15 +50,9 @@ const Footer = () => {
                   <span className="text-lg font-black text-white">A</span>
                   <span className="text-lg font-black text-white/80">.</span>
                 </div>
-                {/* Animated underline */}
-                <motion.div
-                  className="absolute -bottom-0.5 left-0 right-0 h-0.5 bg-primary-500 dark:bg-primary-400 rounded-full"
-                  initial={{ scaleX: 0 }}
-                  whileInView={{ scaleX: 1 }}
-                  transition={{ duration: 0.8, delay: 0.3 }}
-                />
+              
               </div>
-              <div>
+              <div className='flex flex-col'>
                 <span className="font-bold text-base text-gray-900 dark:text-white block">
                   Ahmad Omar
                 </span>

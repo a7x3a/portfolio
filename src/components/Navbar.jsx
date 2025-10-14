@@ -7,6 +7,7 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [hoveredItem, setHoveredItem] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
   const { isDark, toggleTheme } = useTheme();
 
   const { scrollY } = useScroll();
@@ -14,6 +15,15 @@ const Navbar = () => {
   useMotionValueEvent(scrollY, "change", (latest) => {
     setIsScrolled(latest > 20);
   });
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -49,7 +59,7 @@ const Navbar = () => {
     } else {
       const element = document.querySelector(href);
       if (element) {
-        const navHeight = 17;
+        const navHeight = isMobile ? 17 : 10;
         const elementPosition = element.getBoundingClientRect().top;
         const offsetPosition = elementPosition + window.pageYOffset - navHeight;
         
@@ -88,13 +98,13 @@ const Navbar = () => {
     <>
       <div className="fixed top-0 left-0 right-0 z-50 flex justify-center pointer-events-none">
         <motion.nav
-          className="w-full max-w-full pointer-events-auto"
+          className="w-full max-w-full pointer-events-auto px-0"
           initial={{ y: -100, opacity: 0 }}
           animate={{ 
             y: 0, 
             opacity: 1,
-            paddingLeft: isScrolled ? '2.5%' : '0px',
-            paddingRight: isScrolled ? '2.5%' : '0px',
+            paddingLeft: isScrolled ? (isMobile ? '2.5%' : '0.5%') : '0px',
+            paddingRight: isScrolled ? (isMobile ? '2.5%' : '0.5%') : '0px',
             marginTop: isScrolled ? '0.75rem' : '0',
           }}
           transition={{ 

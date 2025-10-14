@@ -1,10 +1,11 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRef, useState } from 'react';
+import { ChevronDown } from 'lucide-react';
 import { 
   SiReact, SiJavascript, SiHtml5, SiCss3, SiTailwindcss, 
-  SiNodedotjs, SiMongodb, SiGit, SiGithub, SiFigma,
+  SiNodedotjs, SiMongodb, SiGit, SiGithub,
   SiVite, SiFirebase, SiNetlify,
-  SiVercel, SiPostman, SiNpm, SiBootstrap
+  SiVercel, SiPostman, SiNpm, SiBootstrap, SiMysql
 } from 'react-icons/si';
 
 const Skills = () => {
@@ -23,16 +24,16 @@ const Skills = () => {
     { name: 'Firebase', icon: SiFirebase, color: '#FFCA28', darkColor: '#FFCA28' },
     { name: 'Git', icon: SiGit, color: '#F05032', darkColor: '#F05032' },
     { name: 'GitHub', icon: SiGithub, color: '#181717', darkColor: '#FFFFFF' },
-    { name: 'Figma', icon: SiFigma, color: '#F24E1E', darkColor: '#F24E1E' },
     { name: 'Vite', icon: SiVite, color: '#646CFF', darkColor: '#646CFF' },
     { name: 'Postman', icon: SiPostman, color: '#FF6C37', darkColor: '#FF6C37' },
     { name: 'npm', icon: SiNpm, color: '#CB3837', darkColor: '#CB3837' },
     { name: 'Netlify', icon: SiNetlify, color: '#00C7B7', darkColor: '#00C7B7' },
     { name: 'Vercel', icon: SiVercel, color: '#000000', darkColor: '#FFFFFF' },
+    { name: 'MySQL', icon: SiMysql, color: '#4479A1', darkColor: '#4479A1' },
   ];
 
   return (
-    <section id="skills" ref={ref} className="relative py-16 sm:py-20 md:py-32 px-6 bg-white dark:bg-gray-900">
+    <section id="skills" ref={ref} className="relative py-16 sm:py-20 md:py-32 px-6 bg-white dark:bg-gray-900" aria-label="Skills and technologies section">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
         {/* Header */}
         <motion.div
@@ -48,13 +49,13 @@ const Skills = () => {
           <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-3">
             Skills & Technologies
           </h2>
-          <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base max-w-2xl mx-auto">
+          <p className="text-gray-600 font-light dark:text-gray-400 text-sm sm:text-base max-w-2xl mx-auto">
             Hover to reveal skill names
           </p>
         </motion.div>
 
         {/* Skills Grid */}
-        <div className="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-7 xl:grid-cols-8 gap-4 sm:gap-5 md:gap-6">
+        <div className="grid place-content-center grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-7 xl:grid-cols-8 gap-4 sm:gap-5 md:gap-6">
           {skills.map((skill, index) => {
             const isHovered = hoveredIndex === index;
 
@@ -64,22 +65,27 @@ const Skills = () => {
                 initial={{ opacity: 0, scale: 0.5 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 transition={{ 
-                  duration: 0.4, 
-                  delay: index * 0.03,
+                  duration: 0.5, 
+                  delay: index * 0.05,
                   type: "spring",
-                  stiffness: 200
+                  stiffness: 150,
+                  damping: 15,
+                  filter: { duration: 0.2 },
+                  opacity: { duration: 0.2 },
                 }}
                 viewport={{ once: true }}
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
                 className="relative group flex items-center justify-center"
+                animate={{
+                  filter: hoveredIndex !== null && !isHovered ? 'blur(2px)' : 'blur(0px)',
+                  opacity: hoveredIndex !== null && !isHovered ? 0.5 : 1,
+                }}
               >
                 {/* Circle Shape */}
-                <motion.div
+                <div
                   className="relative w-full aspect-square max-w-[80px] sm:max-w-[90px] md:max-w-[100px] cursor-pointer"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                  transition={{ duration: 0.2 }}
+                  style={{ zIndex: isHovered ? 100 : 1 }}
                 >
                   {/* Circle Container */}
                   <div className="relative w-full h-full">
@@ -99,7 +105,7 @@ const Skills = () => {
 
                     {/* Rounded Square Background */}
                     <motion.div
-                      className="relative w-full h-full rounded-2xl bg-white dark:bg-gray-800 border-2 transition-all duration-300 shadow-lg"
+                      className="relative w-full h-full rounded-2xl bg-white dark:bg-gray-800 border dark:border-black/50 transition-all duration-300 shadow-lg"
                       style={{
                         borderColor: isHovered ? skill.color : undefined,
                         boxShadow: isHovered 
@@ -124,20 +130,13 @@ const Skills = () => {
 
                   {/* Icon - Centered */}
                   <div className="absolute inset-0 flex items-center justify-center z-10">
-                    <motion.div
-                      animate={{
-                        scale: isHovered ? 1.15 : 1,
+                    <skill.icon 
+                      className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 transition-all duration-300"
+                      style={{ 
+                        color: skill.color,
+                        filter: isHovered ? `drop-shadow(0 0 8px ${skill.color}60)` : 'none',
                       }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <skill.icon 
-                        className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 transition-all duration-300"
-                        style={{ 
-                          color: skill.color,
-                          filter: isHovered ? `drop-shadow(0 0 8px ${skill.color}60)` : 'none',
-                        }}
-                      />
-                    </motion.div>
+                    />
                   </div>
 
                   {/* Tooltip - Emerges from center */}
@@ -150,29 +149,31 @@ const Skills = () => {
                           animate={{ scaleY: 1, opacity: 1 }}
                           exit={{ scaleY: 0, opacity: 0 }}
                           transition={{ duration: 0.2 }}
-                          className="absolute bottom-full left-1/2 -translate-x-1/2 w-0.5 h-10 sm:h-12 origin-bottom z-40 mb-0"
+                          className="absolute bottom-full left-1/2 -translate-x-1/2 w-0.5 h-6 sm:h-8 origin-bottom pointer-events-none"
                           style={{
                             background: `linear-gradient(to top, ${skill.color}60, ${skill.color}00)`,
+                            zIndex: 9998,
                           }}
                         />
                         
                         {/* Tooltip - Perfectly Centered */}
-                        <motion.div
-                          initial={{ opacity: 0, scale: 0 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          exit={{ opacity: 0, scale: 0 }}
-                          transition={{ 
-                            duration: 0.3,
-                            type: "spring",
-                            stiffness: 300,
-                            damping: 20
-                          }}
-                          className="absolute -top-20 sm:-top-24 left-1/2 z-50"
-                          style={{
-                            transformOrigin: "center bottom",
-                            transform: "translateX(-50%)"
-                          }}
-                        >
+                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                          <motion.div
+                            initial={{ opacity: 0, scale: 0 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0 }}
+                            transition={{ 
+                              duration: 0.3,
+                              type: "spring",
+                              stiffness: 300,
+                              damping: 20
+                            }}
+                            className="absolute bottom-full mb-6 sm:mb-8"
+                            style={{
+                              transformOrigin: "center bottom",
+                              zIndex: 9999,
+                            }}
+                          >
                           <div 
                             className="relative px-4 py-2 rounded-xl backdrop-blur-md shadow-2xl border-2"
                             style={{
@@ -193,11 +194,7 @@ const Skills = () => {
                               <span className="hidden dark:inline" style={{ color: skill.darkColor }}>{skill.name}</span>
                             </span>
                             
-                            {/* Bottom shine effect */}
-                            <div 
-                              className="absolute bottom-0 left-0 right-0 h-px opacity-50"
-                              style={{ background: skill.color }}
-                            />
+                            
                           </div>
                           
                           {/* Arrow - Centered Diamond */}
@@ -210,28 +207,21 @@ const Skills = () => {
                               }}
                             />
                           </div>
-                        </motion.div>
+                          </motion.div>
+                        </div>
                       </>
                     )}
                   </AnimatePresence>
-                </motion.div>
+                </div>
               </motion.div>
             );
           })}
         </div>
 
-        {/* Bottom Text */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          viewport={{ once: true }}
-          className="mt-12 sm:mt-16 text-center"
-        >
-          <p className="text-sm text-gray-500 dark:text-gray-600 font-medium">
-            And continuously learning more...
-          </p>
-        </motion.div>
+        {/* Section Separator */}
+        <div className="mt-16 sm:mt-20 flex justify-center">
+          <div className="w-24 h-px bg-gray-300 dark:bg-gray-700 opacity-30" />
+        </div>
       </div>
     </section>
   );

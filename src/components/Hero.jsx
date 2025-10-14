@@ -31,7 +31,7 @@ const Hero = () => {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-white via-gray-50 to-primary-50/30 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 pt-20 pb-12 sm:pt-16 md:pt-0 md:pb-0">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-white via-gray-50 to-primary-50/30 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 pt-20 pb-12 sm:pt-16 md:pt-0 md:pb-0" aria-label="Hero section">
       {/* Animated Background */}
       <div className="absolute inset-0 overflow-hidden">
         {/* Gradient Orbs */}
@@ -176,8 +176,8 @@ const Hero = () => {
           transition={{ duration: 0.8, delay: 0.5 }}
         >
           {[
-            { Icon: Github, href: 'https://github.com', label: 'GitHub', color: 'hover:bg-gray-900 ' },
-            { Icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn', color: 'hover:bg-blue-600' },
+            { Icon: Github, href: 'https://github.com/a7x3a', label: 'GitHub', color: 'hover:bg-gray-900 dark:hover:bg-gray-700' },
+            { Icon: Linkedin, href: 'https://iq.linkedin.com/in/ahmadomar0', label: 'LinkedIn', color: 'hover:bg-blue-600' },
             { Icon: Mail, href: 'mailto:ahmadomar6511@gmail.com', label: 'Email', color: 'hover:bg-primary-600' }
           ].map(({ Icon, href, label, color }, index) => (
             <a
@@ -203,9 +203,9 @@ const Hero = () => {
           transition={{ duration: 0.8, delay: 0.7 }}
         >
           {[
-            { label: 'Projects', value: '10+', color: 'from-primary-500 to-emerald-500' },
-            { label: 'Experience', value: '2Y', color: 'from-blue-500 to-cyan-500' },
-            { label: 'Technologies', value: '17+', color: 'from-purple-500 to-pink-500' }
+            { label: 'Projects', value: '7', color: 'from-primary-500 to-emerald-500' },
+            { label: 'Experience', value: '1Y+', color: 'from-blue-500 to-cyan-500' },
+            { label: 'Technologies', value: '17', color: 'from-purple-500 to-pink-500' }
           ].map((stat, index) => (
             <div
               key={index}

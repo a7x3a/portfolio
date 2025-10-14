@@ -1,0 +1,19 @@
+{
+  "name": "Ahmad Omar - Front-End Developer Portfolio",
+  "short_name": "Ahmad Portfolio",
+  "description": "Front-End Developer and Computer Science student portfolio showcasing projects and skills",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#22c55e",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/vite.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
+

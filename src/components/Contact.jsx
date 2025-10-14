@@ -45,14 +45,14 @@ const Contact = () => {
   ];
 
   return (
-    <section id="contact" ref={ref} className="relative py-16 sm:py-20 md:py-32 bg-white dark:bg-gray-900 overflow-hidden">
+    <section id="contact" ref={ref} className="relative py-16 sm:py-20 md:py-32 bg-white dark:bg-gray-900 overflow-hidden" aria-label="Contact form section">
       {/* Parallax background */}
       <motion.div
         style={{ y }}
         className="absolute top-40 left-20 w-96 h-96 bg-primary-500/10 dark:bg-primary-500/5 rounded-full blur-3xl pointer-events-none"
       />
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl relative z-10">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -77,30 +77,30 @@ const Contact = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="relative bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-3xl border-2 border-gray-200 dark:border-gray-700 p-6 sm:p-10 shadow-xl"
+          className="relative bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-3xl border-2 border-gray-200 dark:border-gray-700 p-6 sm:p-8 md:p-10 shadow-xl"
         >
           {/* Decorative Elements */}
           <div className="absolute top-0 right-0 w-40 h-40 bg-primary-500/5 dark:bg-primary-500/10 rounded-full blur-3xl -z-10" />
           <div className="absolute bottom-0 left-0 w-40 h-40 bg-blue-500/5 dark:bg-blue-500/10 rounded-full blur-3xl -z-10" />
-          <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
+          <form onSubmit={handleSubmit} className="space-y-5 relative z-10">
             {/* Form Title */}
-            <div className="text-center mb-6">
-              <h3 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-2">
+            <div className="text-center mb-4">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-1.5">
                 Send me a message
               </h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
                 I'll get back to you as soon as possible
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2.5">
                   Your Name <span className="text-red-500">*</span>
                 </label>
                 <Input
                   type="text"
-                  placeholder="Ahmad Omar"
+                  placeholder="Jhon Dee"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   required
@@ -129,7 +129,7 @@ const Contact = () => {
                 placeholder="Tell me about your project or idea..."
                 value={formData.message}
                 onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                rows={6}
+                rows={4}
                 required
               />
             </div>
@@ -137,9 +137,9 @@ const Contact = () => {
             <Button
               type="submit"
               variant="primary"
-              size="lg"
+              size="md"
               className="w-full shadow-lg hover:shadow-xl"
-              icon={<Send className="w-4 h-4 sm:w-5 sm:h-5" />}
+              icon={<Send className="w-4 h-4" />}
               iconPosition="right"
             >
               Send Message
@@ -147,7 +147,7 @@ const Contact = () => {
           </form>
 
           {/* Contact Info */}
-          <div className="mt-10 pt-8 border-t-2 border-gray-200 dark:border-gray-700">
+          <div className="mt-8 pt-6 border-t-2 border-gray-200 dark:border-gray-700">
             <p className="text-center text-sm font-medium text-gray-500 dark:text-gray-400 mb-6">
               Or reach me directly at
             </p>
@@ -177,6 +177,7 @@ const Contact = () => {
             </div>
           </div>
         </motion.div>
+
       </div>
     </section>
   );
