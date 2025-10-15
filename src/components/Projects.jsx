@@ -22,10 +22,11 @@ const Projects = () => {
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"],
-    layoutEffect: false
+    layoutEffect: false,
+    container: typeof window !== 'undefined' ? undefined : null
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
+  const y = useTransform(scrollYProgress, [0, 1], isDesktop ? [100, -100] : [0, 0]);
 
   const projects = [
     {
@@ -89,24 +90,19 @@ const Projects = () => {
   return (
     <section id="projects" ref={ref} className="relative py-16 sm:py-20 md:py-32 bg-gray-50 dark:bg-gray-900/50 overflow-hidden" aria-label="Projects portfolio section">
       {/* Parallax background - Only on desktop */}
-      <div className="absolute inset-0 pointer-events-none">
-        {isDesktop ? (
-          <motion.div
-            layout
-            style={{ y }}
-            className="absolute bottom-20 right-20 w-96 h-96 bg-emerald-500/10 dark:bg-emerald-500/5 rounded-full blur-3xl"
-          />
-        ) : (
-          <div className="absolute bottom-20 right-20 w-96 h-96 bg-emerald-500/5 dark:bg-emerald-500/3 rounded-full blur-2xl" />
-        )}
-      </div>
+      {isDesktop && (
+        <motion.div
+          style={{ y }}
+          className="absolute bottom-20 right-20 w-96 h-96 bg-emerald-500/10 dark:bg-emerald-500/5 rounded-full blur-3xl pointer-events-none"
+        />
+      )}
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "-100px", amount: 0.3 }}
           className="text-center mb-8 sm:mb-12 md:mb-16"
         >
           <span className="inline-block px-3 py-1 sm:px-4 sm:py-1.5 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-xs sm:text-sm font-medium mb-3 sm:mb-4">
@@ -127,8 +123,8 @@ const Projects = () => {
               key={index}
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: index * 0.05 }}
+              viewport={{ once: true, margin: "-50px", amount: 0.2 }}
               className="group"
             >
               <motion.div 

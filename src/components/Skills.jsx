@@ -52,7 +52,7 @@ const Skills = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "-100px", amount: 0.3 }}
           className="text-center mb-12 sm:mb-16"
         >
           <span className="inline-block px-4 py-1.5 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-sm font-medium mb-4">
@@ -78,14 +78,14 @@ const Skills = () => {
                 whileInView={{ opacity: 1, scale: 1 }}
                 transition={{ 
                   duration: 0.5, 
-                  delay: index * 0.05,
+                  delay: index * 0.03,
                   type: "spring",
                   stiffness: 150,
                   damping: 15,
                   filter: { duration: 0.2 },
                   opacity: { duration: 0.2 },
                 }}
-                viewport={{ once: true }}
+                viewport={{ once: true, margin: "-50px", amount: 0.2 }}
                 onMouseEnter={() => isDesktop && setHoveredIndex(index)}
                 onMouseLeave={() => isDesktop && setHoveredIndex(null)}
                 className="relative group flex items-center justify-center"

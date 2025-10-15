@@ -21,10 +21,11 @@ const About = () => {
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"],
-    layoutEffect: false
+    layoutEffect: false,
+    container: typeof window !== 'undefined' ? undefined : null
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
+  const y = useTransform(scrollYProgress, [0, 1], isDesktop ? [100, -100] : [0, 0]);
 
   const highlights = [
     {
@@ -53,17 +54,12 @@ const About = () => {
   return (
     <section id="about" ref={ref} className="relative py-16 px-6 sm:py-20 md:py-32 bg-gray-50 dark:bg-gray-900/50 overflow-hidden" aria-label="About section">
       {/* Parallax background - Only on desktop */}
-      <div className="absolute inset-0 pointer-events-none">
-        {isDesktop ? (
-          <motion.div
-            layout
-            style={{ y }}
-            className="absolute top-20 right-10 w-80 h-80 bg-primary-500/10 dark:bg-primary-500/5 rounded-full blur-3xl"
-          />
-        ) : (
-          <div className="absolute top-20 right-10 w-80 h-80 bg-primary-500/5 dark:bg-primary-500/3 rounded-full blur-2xl" />
-        )}
-      </div>
+      {isDesktop && (
+        <motion.div
+          style={{ y }}
+          className="absolute top-20 right-10 w-80 h-80 bg-primary-500/10 dark:bg-primary-500/5 rounded-full blur-3xl pointer-events-none"
+        />
+      )}
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
         {/* Header */}
@@ -71,7 +67,7 @@ const About = () => {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "-100px", amount: 0.3 }}
           className="text-center mb-8 sm:mb-12 md:mb-16"
         >
           <span className="inline-block px-3 py-1 sm:px-4 sm:py-1.5 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-xs sm:text-sm font-medium mb-3 sm:mb-4">
@@ -88,7 +84,7 @@ const About = () => {
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-50px", amount: 0.3 }}
             className="space-y-4 text-gray-600 dark:text-gray-400 leading-relaxed text-sm sm:text-base"
           >
             <p>
@@ -109,7 +105,7 @@ const About = () => {
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-50px", amount: 0.3 }}
             className="grid grid-cols-1 gap-3 sm:gap-4"
           >
             {highlights.map((item, index) => (
@@ -117,8 +113,8 @@ const About = () => {
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.1, delay: 0.1 * index }}
-                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.1 * index }}
+                viewport={{ once: true, amount: 0.3 }}
                 className="p-4 sm:p-5 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-600 transition-all duration-200"
               >
                 <div className="flex items-center gap-3 sm:gap-4">

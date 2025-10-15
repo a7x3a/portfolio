@@ -24,10 +24,11 @@ const Contact = () => {
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"],
-    layoutEffect: false
+    layoutEffect: false,
+    container: typeof window !== 'undefined' ? undefined : null
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
+  const y = useTransform(scrollYProgress, [0, 1], isDesktop ? [100, -100] : [0, 0]);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -62,24 +63,19 @@ const Contact = () => {
   return (
     <section id="contact" ref={ref} className="relative py-16 sm:py-20 md:py-32 bg-white dark:bg-gray-900 overflow-hidden" aria-label="Contact form section">
       {/* Parallax background - Only on desktop */}
-      <div className="absolute inset-0 pointer-events-none">
-        {isDesktop ? (
-          <motion.div
-            layout
-            style={{ y }}
-            className="absolute top-40 left-20 w-96 h-96 bg-primary-500/10 dark:bg-primary-500/5 rounded-full blur-3xl"
-          />
-        ) : (
-          <div className="absolute top-40 left-20 w-96 h-96 bg-primary-500/5 dark:bg-primary-500/3 rounded-full blur-2xl" />
-        )}
-      </div>
+      {isDesktop && (
+        <motion.div
+          style={{ y }}
+          className="absolute top-40 left-20 w-96 h-96 bg-primary-500/10 dark:bg-primary-500/5 rounded-full blur-3xl pointer-events-none"
+        />
+      )}
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "-100px", amount: 0.3 }}
           className="text-center mb-8 sm:mb-12 md:mb-16"
         >
           <span className="inline-block px-3 py-1 sm:px-4 sm:py-1.5 rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-xs sm:text-sm font-medium mb-3 sm:mb-4">
@@ -98,7 +94,7 @@ const Contact = () => {
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "-100px", amount: 0.2 }}
           className="relative bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-3xl border-2 border-gray-200 dark:border-gray-700 p-6 sm:p-8 md:p-10 shadow-xl"
         >
           {/* Decorative Elements */}
@@ -188,7 +184,7 @@ const Contact = () => {
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
-                  viewport={{ once: true }}
+                  viewport={{ once: true, amount: 0.5 }}
                   className="flex items-center gap-4 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
                 >
                   <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center">

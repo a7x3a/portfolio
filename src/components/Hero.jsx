@@ -287,14 +287,7 @@ const Hero = () => {
       {/* Scroll indicator */}
       <motion.div
         className="flex absolute bottom-6 sm:bottom-8 flex-col items-center gap-1.5 sm:gap-2 cursor-pointer group z-10"
-        animate={{ 
-          y: [0, 10, 0],
-        }}
-        transition={{ 
-          duration: 2, 
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
+  
         onClick={() => {
           document.querySelector('#about')?.scrollIntoView({ behavior: 'smooth' });
         }}
