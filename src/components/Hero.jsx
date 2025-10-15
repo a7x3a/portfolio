@@ -11,14 +11,14 @@ const Hero = () => {
   const x = useSpring(mouseX, springConfig);
   const y = useSpring(mouseY, springConfig);
 
-  useEffect(() => {
+  /*useEffect(() => {
     const handleMouseMove = (e) => {
       mouseX.set(e.clientX);
       mouseY.set(e.clientY);
     };
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, [mouseX, mouseY]);
+  }, [mouseX, mouseY]);*/
 
   const handleScrollToProjects = () => {
     const projectsSection = document.getElementById('projects');
