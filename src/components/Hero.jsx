@@ -1,24 +1,57 @@
 import { motion, useMotionValue, useSpring } from 'framer-motion';
 import { Github, Linkedin, Mail, ChevronDown, Sparkles } from 'lucide-react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Button from './ui/Button';
 
 const Hero = () => {
+  const [isDesktop, setIsDesktop] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
+  // All hooks must be called at the top level, always in the same order
   const springConfig = { stiffness: 150, damping: 15 };
   const x = useSpring(mouseX, springConfig);
   const y = useSpring(mouseY, springConfig);
+  
+  // Spring values for gradient orbs
+  const orbX1 = useSpring(mouseX, { stiffness: 50, damping: 20 });
+  const orbY1 = useSpring(mouseY, { stiffness: 50, damping: 20 });
+  const orbX2 = useSpring(mouseX, { stiffness: 30, damping: 20, mass: 0.5 });
+  const orbY2 = useSpring(mouseY, { stiffness: 30, damping: 20, mass: 0.5 });
 
-  /*useEffect(() => {
+  useEffect(() => {
+    // Check if device is desktop and user prefers motion
+    const checkDevice = () => {
+      const hasPointerDevice = window.matchMedia('(pointer: fine)').matches;
+      const isLargeScreen = window.matchMedia('(min-width: 1024px)').matches;
+      setIsDesktop(hasPointerDevice && isLargeScreen);
+    };
+
+    const checkMotionPreference = () => {
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      setPrefersReducedMotion(prefersReduced);
+    };
+
+    checkDevice();
+    checkMotionPreference();
+
+    window.addEventListener('resize', checkDevice);
+
+    return () => window.removeEventListener('resize', checkDevice);
+  }, []);
+
+  useEffect(() => {
+    // Only add mousemove listener on desktop
+    if (!isDesktop) return;
+
     const handleMouseMove = (e) => {
       mouseX.set(e.clientX);
       mouseY.set(e.clientY);
     };
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, [mouseX, mouseY]);*/
+  }, [mouseX, mouseY, isDesktop]);
 
   const handleScrollToProjects = () => {
     const projectsSection = document.getElementById('projects');
@@ -34,30 +67,50 @@ const Hero = () => {
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-white via-gray-50 to-primary-50/30 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 pt-20 pb-12 sm:pt-16 md:pt-0 md:pb-0" aria-label="Hero section">
       {/* Animated Background */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Gradient Orbs */}
-        <motion.div
-          className="absolute w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 rounded-full blur-3xl opacity-30 dark:opacity-20"
-          style={{
-            background: 'radial-gradient(circle, #22c55e 0%, transparent 70%)',
-            x: useSpring(mouseX, { stiffness: 50, damping: 20 }),
-            y: useSpring(mouseY, { stiffness: 50, damping: 20 }),
-            translateX: '-50%',
-            translateY: '-50%',
-          }}
-        />
-        <motion.div
-          className="absolute w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 rounded-full blur-3xl opacity-30 dark:opacity-20"
-          style={{
-            background: 'radial-gradient(circle, #3b82f6 0%, transparent 70%)',
-            x: useSpring(mouseX, { stiffness: 30, damping: 20, mass: 0.5 }),
-            y: useSpring(mouseY, { stiffness: 30, damping: 20, mass: 0.5 }),
-            translateX: '50%',
-            translateY: '50%',
-          }}
-        />
+        {/* Gradient Orbs - Only on desktop with mouse tracking */}
+        {isDesktop ? (
+          <>
+            <motion.div
+              className="absolute w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 rounded-full blur-3xl opacity-30 dark:opacity-20"
+              style={{
+                background: 'radial-gradient(circle, #22c55e 0%, transparent 70%)',
+                x: orbX1,
+                y: orbY1,
+                translateX: '-50%',
+                translateY: '-50%',
+              }}
+            />
+            <motion.div
+              className="absolute w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 rounded-full blur-3xl opacity-30 dark:opacity-20"
+              style={{
+                background: 'radial-gradient(circle, #3b82f6 0%, transparent 70%)',
+                x: orbX2,
+                y: orbY2,
+                translateX: '50%',
+                translateY: '50%',
+              }}
+            />
+          </>
+        ) : (
+          /* Static gradient orbs for mobile - no animations */
+          <>
+            <div
+              className="absolute top-1/4 left-1/4 w-48 h-48 sm:w-64 sm:h-64 rounded-full blur-2xl opacity-20 dark:opacity-10"
+              style={{
+                background: 'radial-gradient(circle, #22c55e 0%, transparent 70%)',
+              }}
+            />
+            <div
+              className="absolute bottom-1/4 right-1/4 w-48 h-48 sm:w-64 sm:h-64 rounded-full blur-2xl opacity-20 dark:opacity-10"
+              style={{
+                background: 'radial-gradient(circle, #3b82f6 0%, transparent 70%)',
+              }}
+            />
+          </>
+        )}
 
-        {/* Animated Grid Lines */}
-        <svg className="absolute inset-0 w-full h-full opacity-10 dark:opacity-5" xmlns="http://www.w3.org/2000/svg">
+        {/* Animated Grid Lines - Lighter on mobile */}
+        <svg className="absolute inset-0 w-full h-full opacity-5 lg:opacity-10 dark:opacity-[0.02] dark:lg:opacity-5" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
               <circle cx="1" cy="1" r="1" fill="currentColor" className="text-primary-500" />
@@ -66,46 +119,50 @@ const Hero = () => {
           <rect width="100%" height="100%" fill="url(#grid)" />
         </svg>
 
-        {/* Floating Elements */}
-        <motion.div
-          className="absolute top-1/4 left-1/4 w-3 h-3 rounded-full bg-primary-500/40"
-          animate={{
-            y: [0, -20, 0],
-            opacity: [0.4, 0.8, 0.4],
-          }}
-          transition={{
-            duration: 4,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
-        <motion.div
-          className="absolute top-2/3 right-1/4 w-4 h-4 rounded-full bg-blue-500/40"
-          animate={{
-            y: [0, -30, 0],
-            opacity: [0.3, 0.7, 0.3],
-          }}
-          transition={{
-            duration: 5,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 1
-          }}
-        />
-        <motion.div
-          className="absolute top-1/2 right-1/3 w-2 h-2 rounded-full bg-emerald-500/40"
-          animate={{
-            y: [0, -25, 0],
-            x: [0, 15, 0],
-            opacity: [0.4, 0.6, 0.4],
-          }}
-          transition={{
-            duration: 6,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 2
-          }}
-        />
+        {/* Floating Elements - Disabled on mobile and reduced motion */}
+        {!prefersReducedMotion && isDesktop && (
+          <>
+            <motion.div
+              className="absolute top-1/4 left-1/4 w-3 h-3 rounded-full bg-primary-500/40"
+              animate={{
+                y: [0, -20, 0],
+                opacity: [0.4, 0.8, 0.4],
+              }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            />
+            <motion.div
+              className="absolute top-2/3 right-1/4 w-4 h-4 rounded-full bg-blue-500/40"
+              animate={{
+                y: [0, -30, 0],
+                opacity: [0.3, 0.7, 0.3],
+              }}
+              transition={{
+                duration: 5,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 1
+              }}
+            />
+            <motion.div
+              className="absolute top-1/2 right-1/3 w-2 h-2 rounded-full bg-emerald-500/40"
+              animate={{
+                y: [0, -25, 0],
+                x: [0, 15, 0],
+                opacity: [0.4, 0.6, 0.4],
+              }}
+              transition={{
+                duration: 6,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 2
+              }}
+            />
+          </>
+        )}
       </div>
 
       <div className="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto w-full">

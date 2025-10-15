@@ -3,6 +3,7 @@ import { motion, useSpring, useMotionValue } from 'framer-motion';
 
 const CursorFollower = () => {
   const [isHovering, setIsHovering] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
 
@@ -11,6 +12,23 @@ const CursorFollower = () => {
   const cursorYSpring = useSpring(cursorY, springConfig);
 
   useEffect(() => {
+    // Check if device is desktop and has mouse
+    const checkDevice = () => {
+      const hasPointerDevice = window.matchMedia('(pointer: fine)').matches;
+      const isLargeScreen = window.matchMedia('(min-width: 1024px)').matches;
+      setIsDesktop(hasPointerDevice && isLargeScreen);
+    };
+
+    checkDevice();
+    window.addEventListener('resize', checkDevice);
+
+    return () => window.removeEventListener('resize', checkDevice);
+  }, []);
+
+  useEffect(() => {
+    // Only add event listeners on desktop devices
+    if (!isDesktop) return;
+
     const moveCursor = (e) => {
       cursorX.set(e.clientX - 16);
       cursorY.set(e.clientY - 16);
@@ -35,13 +53,16 @@ const CursorFollower = () => {
         el.removeEventListener('mouseleave', handleMouseLeave);
       });
     };
-  }, [cursorX, cursorY]);
+  }, [cursorX, cursorY, isDesktop]);
+
+  // Don't render anything on mobile/touch devices
+  if (!isDesktop) return null;
 
   return (
     <>
       {/* Main cursor */}
       <motion.div
-        className="fixed top-0 left-0 w-8 h-8 pointer-events-none z-[9999] mix-blend-difference hidden lg:block"
+        className="fixed top-0 left-0 w-8 h-8 pointer-events-none z-[9999] mix-blend-difference"
         style={{
           x: cursorXSpring,
           y: cursorYSpring,
@@ -62,7 +83,7 @@ const CursorFollower = () => {
 
       {/* Cursor trail */}
       <motion.div
-        className="fixed top-0 left-0 w-2 h-2 pointer-events-none z-[9998] hidden lg:block"
+        className="fixed top-0 left-0 w-2 h-2 pointer-events-none z-[9998]"
         style={{
           x: cursorXSpring,
           y: cursorYSpring,

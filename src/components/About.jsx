@@ -1,12 +1,27 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { GraduationCap, Code, Target } from 'lucide-react';
 
 const About = () => {
   const ref = useRef(null);
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const checkDevice = () => {
+      const hasPointerDevice = window.matchMedia('(pointer: fine)').matches;
+      const isLargeScreen = window.matchMedia('(min-width: 1024px)').matches;
+      setIsDesktop(hasPointerDevice && isLargeScreen);
+    };
+
+    checkDevice();
+    window.addEventListener('resize', checkDevice);
+    return () => window.removeEventListener('resize', checkDevice);
+  }, []);
+
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start end", "end start"]
+    offset: ["start end", "end start"],
+    layoutEffect: false
   });
 
   const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
@@ -37,11 +52,18 @@ const About = () => {
 
   return (
     <section id="about" ref={ref} className="relative py-16 px-6 sm:py-20 md:py-32 bg-gray-50 dark:bg-gray-900/50 overflow-hidden" aria-label="About section">
-      {/* Parallax background */}
-      <motion.div
-        style={{ y }}
-        className="absolute top-20 right-10 w-80 h-80 bg-primary-500/10 dark:bg-primary-500/5 rounded-full blur-3xl pointer-events-none"
-      />
+      {/* Parallax background - Only on desktop */}
+      <div className="absolute inset-0 pointer-events-none">
+        {isDesktop ? (
+          <motion.div
+            layout
+            style={{ y }}
+            className="absolute top-20 right-10 w-80 h-80 bg-primary-500/10 dark:bg-primary-500/5 rounded-full blur-3xl"
+          />
+        ) : (
+          <div className="absolute top-20 right-10 w-80 h-80 bg-primary-500/5 dark:bg-primary-500/3 rounded-full blur-2xl" />
+        )}
+      </div>
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
         {/* Header */}

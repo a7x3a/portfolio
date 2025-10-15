@@ -21,6 +21,18 @@
   a, button {
     @apply cursor-pointer;
   }
+
+  /* Performance optimizations */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
 }
 
 @layer components {
@@ -46,5 +58,23 @@
   
   .cursor-glow {
     cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8" fill="rgba(34, 197, 94, 0.3)" /></svg>') 10 10, auto;
+  }
+
+  /* Performance optimizations for animations */
+  .gpu-accelerated {
+    transform: translateZ(0);
+    will-change: transform;
+  }
+
+  /* Reduce animations on mobile */
+  @media (max-width: 1024px) {
+    .blur-3xl {
+      filter: blur(40px) !important;
+    }
+  }
+
+  /* Optimize images */
+  img {
+    content-visibility: auto;
   }
 }

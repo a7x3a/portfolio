@@ -87,10 +87,17 @@ const Navbar = () => {
   const [activeSection, setActiveSection] = useState('#');
 
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      setActiveSection(getActiveSection());
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setActiveSection(getActiveSection());
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 

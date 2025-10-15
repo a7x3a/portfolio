@@ -1,13 +1,28 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { ExternalLink } from 'lucide-react';
 import Button from './ui/Button';
 
 const Projects = () => {
   const ref = useRef(null);
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const checkDevice = () => {
+      const hasPointerDevice = window.matchMedia('(pointer: fine)').matches;
+      const isLargeScreen = window.matchMedia('(min-width: 1024px)').matches;
+      setIsDesktop(hasPointerDevice && isLargeScreen);
+    };
+
+    checkDevice();
+    window.addEventListener('resize', checkDevice);
+    return () => window.removeEventListener('resize', checkDevice);
+  }, []);
+
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start end", "end start"]
+    offset: ["start end", "end start"],
+    layoutEffect: false
   });
 
   const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
@@ -73,11 +88,18 @@ const Projects = () => {
 
   return (
     <section id="projects" ref={ref} className="relative py-16 sm:py-20 md:py-32 bg-gray-50 dark:bg-gray-900/50 overflow-hidden" aria-label="Projects portfolio section">
-      {/* Parallax background */}
-      <motion.div
-        style={{ y }}
-        className="absolute bottom-20 right-20 w-96 h-96 bg-emerald-500/10 dark:bg-emerald-500/5 rounded-full blur-3xl pointer-events-none"
-      />
+      {/* Parallax background - Only on desktop */}
+      <div className="absolute inset-0 pointer-events-none">
+        {isDesktop ? (
+          <motion.div
+            layout
+            style={{ y }}
+            className="absolute bottom-20 right-20 w-96 h-96 bg-emerald-500/10 dark:bg-emerald-500/5 rounded-full blur-3xl"
+          />
+        ) : (
+          <div className="absolute bottom-20 right-20 w-96 h-96 bg-emerald-500/5 dark:bg-emerald-500/3 rounded-full blur-2xl" />
+        )}
+      </div>
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl relative z-10">
         <motion.div
@@ -111,7 +133,7 @@ const Projects = () => {
             >
               <motion.div 
                 className="relative overflow-hidden rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-600 transition-all duration-300 ease-out h-full"
-                whileHover={{ y: -6 }}
+                whileHover={isDesktop ? { y: -6 } : {}}
                 transition={{ duration: 0.3, ease: "easeOut" }}
               >
                 {/* Image */}

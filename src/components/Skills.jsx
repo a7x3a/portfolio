@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { useRef, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { 
   SiReact, SiJavascript, SiHtml5, SiCss3, SiTailwindcss, 
@@ -9,8 +9,20 @@ import {
 } from 'react-icons/si';
 
 const Skills = () => {
-  const ref = useRef(null);
   const [hoveredIndex, setHoveredIndex] = useState(null);
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const checkDevice = () => {
+      const hasPointerDevice = window.matchMedia('(pointer: fine)').matches;
+      const isLargeScreen = window.matchMedia('(min-width: 1024px)').matches;
+      setIsDesktop(hasPointerDevice && isLargeScreen);
+    };
+
+    checkDevice();
+    window.addEventListener('resize', checkDevice);
+    return () => window.removeEventListener('resize', checkDevice);
+  }, []);
 
   const skills = [
     { name: 'React', icon: SiReact, color: '#61DAFB', darkColor: '#61DAFB' },
@@ -33,7 +45,7 @@ const Skills = () => {
   ];
 
   return (
-    <section id="skills" ref={ref} className="relative py-16 sm:py-20 md:py-32 px-6 bg-white dark:bg-gray-900" aria-label="Skills and technologies section">
+    <section id="skills" className="relative py-16 sm:py-20 md:py-32 px-6 bg-white dark:bg-gray-900" aria-label="Skills and technologies section">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
         {/* Header */}
         <motion.div
@@ -74,13 +86,13 @@ const Skills = () => {
                   opacity: { duration: 0.2 },
                 }}
                 viewport={{ once: true }}
-                onMouseEnter={() => setHoveredIndex(index)}
-                onMouseLeave={() => setHoveredIndex(null)}
+                onMouseEnter={() => isDesktop && setHoveredIndex(index)}
+                onMouseLeave={() => isDesktop && setHoveredIndex(null)}
                 className="relative group flex items-center justify-center"
-                animate={{
+                animate={isDesktop ? {
                   filter: hoveredIndex !== null && !isHovered ? 'blur(2px)' : 'blur(0px)',
                   opacity: hoveredIndex !== null && !isHovered ? 0.5 : 1,
-                }}
+                } : {}}
               >
                 {/* Circle Shape */}
                 <div

@@ -1,5 +1,5 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { Mail, MapPin, Phone, Send } from 'lucide-react';
 import Input from './ui/Input';
 import Textarea from './ui/Textarea';
@@ -7,9 +7,24 @@ import Button from './ui/Button';
 
 const Contact = () => {
   const ref = useRef(null);
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const checkDevice = () => {
+      const hasPointerDevice = window.matchMedia('(pointer: fine)').matches;
+      const isLargeScreen = window.matchMedia('(min-width: 1024px)').matches;
+      setIsDesktop(hasPointerDevice && isLargeScreen);
+    };
+
+    checkDevice();
+    window.addEventListener('resize', checkDevice);
+    return () => window.removeEventListener('resize', checkDevice);
+  }, []);
+
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start end", "end start"]
+    offset: ["start end", "end start"],
+    layoutEffect: false
   });
 
   const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
@@ -46,11 +61,18 @@ const Contact = () => {
 
   return (
     <section id="contact" ref={ref} className="relative py-16 sm:py-20 md:py-32 bg-white dark:bg-gray-900 overflow-hidden" aria-label="Contact form section">
-      {/* Parallax background */}
-      <motion.div
-        style={{ y }}
-        className="absolute top-40 left-20 w-96 h-96 bg-primary-500/10 dark:bg-primary-500/5 rounded-full blur-3xl pointer-events-none"
-      />
+      {/* Parallax background - Only on desktop */}
+      <div className="absolute inset-0 pointer-events-none">
+        {isDesktop ? (
+          <motion.div
+            layout
+            style={{ y }}
+            className="absolute top-40 left-20 w-96 h-96 bg-primary-500/10 dark:bg-primary-500/5 rounded-full blur-3xl"
+          />
+        ) : (
+          <div className="absolute top-40 left-20 w-96 h-96 bg-primary-500/5 dark:bg-primary-500/3 rounded-full blur-2xl" />
+        )}
+      </div>
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl relative z-10">
         <motion.div
@@ -95,37 +117,45 @@ const Contact = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2.5">
+                <label htmlFor="contact-name" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2.5">
                   Your Name <span className="text-red-500">*</span>
                 </label>
                 <Input
+                  id="contact-name"
+                  name="name"
                   type="text"
                   placeholder="Jhon Dee"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   required
+                  autoComplete="name"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2.5">
+                <label htmlFor="contact-email" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2.5">
                   Email Address <span className="text-red-500">*</span>
                 </label>
                 <Input
+                  id="contact-email"
+                  name="email"
                   type="email"
                   placeholder="example@email.com"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   required
+                  autoComplete="email"
                 />
               </div>
             </div>
             
             <div>
-              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2.5">
+              <label htmlFor="contact-message" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2.5">
                 Your Message <span className="text-red-500">*</span>
               </label>
               <Textarea
+                id="contact-message"
+                name="message"
                 placeholder="Tell me about your project or idea..."
                 value={formData.message}
                 onChange={(e) => setFormData({ ...formData, message: e.target.value })}
