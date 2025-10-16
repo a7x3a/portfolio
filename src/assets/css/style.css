@@ -16,6 +16,17 @@
     overflow-x: hidden;
     width: 100%;
   }
+
+  /* Add padding on left for fixed sidebar on desktop only */
+  #root {
+    padding-left: 80px;
+  }
+
+  @media (max-width: 768px) {
+    #root {
+      padding-left: 0;
+    }
+  }
   
   * {
     @apply cursor-default;

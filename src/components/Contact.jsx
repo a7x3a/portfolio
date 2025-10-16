@@ -61,7 +61,7 @@ const Contact = () => {
   ];
 
   return (
-    <section id="contact" ref={ref} className="relative py-16 sm:py-20 md:py-32 bg-white dark:bg-gray-900 overflow-hidden" aria-label="Contact form section">
+    <section id="contact" ref={ref} className="relative sm:py-24 py-12 px-6 bg-white dark:bg-gray-900 overflow-hidden" aria-label="Contact form section">
       {/* Parallax background - Only on desktop */}
       {isDesktop && (
         <motion.div

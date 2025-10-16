@@ -45,7 +45,7 @@ const Skills = () => {
   ];
 
   return (
-    <section id="skills" className="relative py-16 sm:py-20 md:py-32 px-6 bg-white dark:bg-gray-900" aria-label="Skills and technologies section">
+    <section id="skills" className="relative sm:py-24 py-12 px-6 bg-white dark:bg-gray-900" aria-label="Skills and technologies section">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
         {/* Header */}
         <motion.div

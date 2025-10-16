@@ -88,7 +88,7 @@ const Projects = () => {
   ];
 
   return (
-    <section id="projects" ref={ref} className="relative py-16 sm:py-20 md:py-32 bg-gray-50 dark:bg-gray-900/50 overflow-hidden" aria-label="Projects portfolio section">
+    <section id="projects" ref={ref} className="relative sm:py-24 py-12 px-6 bg-gray-50 dark:bg-gray-900/50 overflow-hidden" aria-label="Projects portfolio section">
       {/* Parallax background - Only on desktop */}
       {isDesktop && (
         <motion.div

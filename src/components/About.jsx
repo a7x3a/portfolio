@@ -52,7 +52,7 @@ const About = () => {
   ];
 
   return (
-    <section id="about" ref={ref} className="relative py-16 px-6 sm:py-20 md:py-32 bg-gray-50 dark:bg-gray-900/50 overflow-hidden" aria-label="About section">
+    <section id="about" ref={ref} className="relative sm:py-24 py-12 px-6  bg-gray-50 dark:bg-gray-900/50 overflow-hidden" aria-label="About section">
       {/* Parallax background - Only on desktop */}
       {isDesktop && (
         <motion.div
