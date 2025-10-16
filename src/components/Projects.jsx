@@ -32,7 +32,7 @@ const Projects = () => {
     {
       title: 'Hawin Travel',
       description: 'Modern travel booking platform with flight search, hotel reservations, and trip planning features.',
-      image: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=800&h=500&fit=crop',
+      image: 'https://images.unsplash.com/photo-1488085061387-422e29b40080?w=800&h=500&fit=crop',
       tags: ['React', 'Tailwind', 'API'],
       github: 'https://github.com/a7x3a/hawin-travel',
       live: 'https://www.hawintravel.com/',
@@ -40,7 +40,7 @@ const Projects = () => {
     {
       title: 'Cloudy',
       description: 'Weather forecast application with real-time data, beautiful UI, and location-based weather updates.',
-      image: 'https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?w=800&h=500&fit=crop',
+      image: 'https://images.unsplash.com/photo-1561484930-998b6a7b22e8?w=800&h=500&fit=crop',
       tags: ['JavaScript', 'Weather API', 'HTML/CSS'],
       github: 'https://github.com/a7x3a/cloudy',
       live: 'https://cloudyx.netlify.app/',
@@ -48,7 +48,7 @@ const Projects = () => {
     {
       title: 'Menuly',
       description: 'Digital menu management system for restaurants with QR code support and customizable layouts.',
-      image: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&h=500&fit=crop',
+      image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&h=500&fit=crop',
       tags: ['React', 'Firebase', 'Bootstrap'],
       github: 'https://github.com/a7x3a/menuly',
       live: 'https://menuly.netlify.app/',
@@ -56,7 +56,7 @@ const Projects = () => {
     {
       title: 'DownTik',
       description: 'Download TikTok videos and audio without watermarks. Fast, simple, and efficient downloader tool.',
-      image: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&h=500&fit=crop',
+      image: 'https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=800&h=500&fit=crop',
       tags: ['JavaScript', 'API', 'Node.js'],
       github: 'https://github.com/a7x3a/downtik',
       live: 'https://downtikk.vercel.app/',
@@ -64,7 +64,7 @@ const Projects = () => {
     {
       title: 'Raiy Store',
       description: 'E-commerce platform with product catalog, shopping cart, and checkout functionality.',
-      image: 'https://images.unsplash.com/photo-1557821552-17105176677c?w=800&h=500&fit=crop',
+      image: 'https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=800&h=500&fit=crop',
       tags: ['JavaScript', 'MongoDB', 'Express'],
       github: 'https://github.com/a7x3a/raiy_store',
       live: 'https://raiy.netlify.app/',
@@ -72,7 +72,7 @@ const Projects = () => {
     {
       title: 'Taskly',
       description: 'Task management application with priority levels, categories, and deadline tracking.',
-      image: 'https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=800&h=500&fit=crop',
+      image: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800&h=500&fit=crop',
       tags: ['JavaScript', 'LocalStorage', 'UI/UX'],
       github: 'https://github.com/a7x3a/taskly',
       live: 'https://tasklly.vercel.app/',
@@ -80,7 +80,7 @@ const Projects = () => {
     {
       title: 'Hotel Management System',
       description: 'Full-stack hotel management application with booking system, room management, and admin dashboard.',
-      image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=500&fit=crop',
+      image: 'https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&h=500&fit=crop',
       tags: ['React', 'Node.js', 'Express', 'Sequelize'],
       github: 'https://github.com/a7x3a',
       live: null,
@@ -121,26 +121,36 @@ const Projects = () => {
           {projects.map((project, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.05 }}
-              viewport={{ once: true, margin: "-50px", amount: 0.2 }}
+              initial={{ opacity: 0, y: 60, scale: 0.9 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ 
+                duration: 0.7,
+                delay: index * 0.1,
+                ease: [0.22, 1, 0.36, 1]
+              }}
+              viewport={{ once: true, margin: "-80px", amount: 0.2 }}
               className="group"
             >
               <motion.div 
-                className="relative overflow-hidden rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-600 transition-all duration-300 ease-out h-full"
-                whileHover={isDesktop ? { y: -6 } : {}}
-                transition={{ duration: 0.3, ease: "easeOut" }}
+                className="relative overflow-hidden rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-primary-400 dark:hover:border-primary-500 transition-all duration-300 ease-out h-full"
+                whileHover={isDesktop ? { 
+                  y: -8,
+                  scale: 1.02,
+                  boxShadow: "0 20px 40px rgba(0, 0, 0, 0.1)"
+                } : {}}
+                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
               >
                 {/* Image */}
                 <div className="relative h-40 sm:h-48 overflow-hidden bg-gray-200 dark:bg-gray-700">
-                  <img 
+                  <motion.img 
                     src={project.image} 
                     alt={`${project.title} - ${project.description}`}
                     loading="lazy"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    className="w-full h-full object-cover"
+                    whileHover={{ scale: 1.08 }}
+                    transition={{ duration: 0.4, ease: "easeOut" }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
                 </div>
 
                 {/* Content */}

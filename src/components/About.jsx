@@ -101,26 +101,33 @@ const About = () => {
           </motion.div>
 
           {/* Highlights Grid */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true, margin: "-50px", amount: 0.3 }}
-            className="grid grid-cols-1 gap-3 sm:gap-4"
-          >
+          <div className="grid grid-cols-1 gap-3 sm:gap-4">
             {highlights.map((item, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.1 * index }}
-                viewport={{ once: true, amount: 0.3 }}
-                className="p-4 sm:p-5 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-600 transition-all duration-200"
+                initial={{ opacity: 0, x: 50, scale: 0.95 }}
+                whileInView={{ opacity: 1, x: 0, scale: 1 }}
+                transition={{ 
+                  duration: 0.6,
+                  delay: index * 0.15,
+                  ease: [0.22, 1, 0.36, 1]
+                }}
+                viewport={{ once: true, margin: "-80px", amount: 0.4 }}
+                whileHover={{ 
+                  y: -4,
+                  scale: 1.02,
+                  transition: { duration: 0.2 }
+                }}
+                className="p-4 sm:p-5 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:border-primary-400 dark:hover:border-primary-500 hover:shadow-lg dark:hover:shadow-primary-500/10 transition-all duration-300 cursor-default"
               >
                 <div className="flex items-center gap-3 sm:gap-4">
-                  <div className={`p-2.5 sm:p-3 ${item.color} rounded-lg flex-shrink-0`}>
+                  <motion.div 
+                    className={`p-2.5 sm:p-3 ${item.color} rounded-lg flex-shrink-0`}
+                    whileHover={{ rotate: 5, scale: 1.1 }}
+                    transition={{ duration: 0.2 }}
+                  >
                     <item.icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-                  </div>
+                  </motion.div>
                   <div className="flex-1 min-w-0">
                     <h3 className="text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400 mb-0.5 sm:mb-1">
                       {item.title}
@@ -135,7 +142,7 @@ const About = () => {
                 </div>
               </motion.div>
             ))}
-          </motion.div>
+          </div>
         </div>
 
         {/* Section Separator */}
