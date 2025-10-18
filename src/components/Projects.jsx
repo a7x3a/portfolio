@@ -32,7 +32,7 @@ const Projects = () => {
     {
       title: 'Hawin Travel',
       description: 'Modern travel booking platform with flight search, hotel reservations, and trip planning features.',
-      image: 'https://images.unsplash.com/photo-1488085061387-422e29b40080?w=800&h=500&fit=crop',
+      image: '/images/projects/hawin-travel.png',
       tags: ['React', 'Tailwind', 'API'],
       github: 'https://github.com/a7x3a/hawin-travel',
       live: 'https://www.hawintravel.com/',
@@ -40,7 +40,7 @@ const Projects = () => {
     {
       title: 'Cloudy',
       description: 'Weather forecast application with real-time data, beautiful UI, and location-based weather updates.',
-      image: 'https://images.unsplash.com/photo-1561484930-998b6a7b22e8?w=800&h=500&fit=crop',
+      image: '/images/projects/cloudy.png',
       tags: ['JavaScript', 'Weather API', 'HTML/CSS'],
       github: 'https://github.com/a7x3a/cloudy',
       live: 'https://cloudyx.netlify.app/',
@@ -48,7 +48,7 @@ const Projects = () => {
     {
       title: 'Menuly',
       description: 'Digital menu management system for restaurants with QR code support and customizable layouts.',
-      image: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&h=500&fit=crop',
+      image: '/images/projects/menuly.png',
       tags: ['React', 'Firebase', 'Bootstrap'],
       github: 'https://github.com/a7x3a/menuly',
       live: 'https://menuly.netlify.app/',
@@ -56,7 +56,7 @@ const Projects = () => {
     {
       title: 'DownTik',
       description: 'Download TikTok videos and audio without watermarks. Fast, simple, and efficient downloader tool.',
-      image: 'https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=800&h=500&fit=crop',
+      image: '/images/projects/downtik.png',
       tags: ['JavaScript', 'API', 'Node.js'],
       github: 'https://github.com/a7x3a/downtik',
       live: 'https://downtikk.vercel.app/',
@@ -64,7 +64,7 @@ const Projects = () => {
     {
       title: 'Raiy Store',
       description: 'E-commerce platform with product catalog, shopping cart, and checkout functionality.',
-      image: 'https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=800&h=500&fit=crop',
+      image: '/images/projects/raiy-store.png',
       tags: ['JavaScript', 'MongoDB', 'Express'],
       github: 'https://github.com/a7x3a/raiy_store',
       live: 'https://raiy.netlify.app/',
@@ -72,7 +72,7 @@ const Projects = () => {
     {
       title: 'Taskly',
       description: 'Task management application with priority levels, categories, and deadline tracking.',
-      image: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800&h=500&fit=crop',
+      image: '/images/projects/taskly.png',
       tags: ['JavaScript', 'LocalStorage', 'UI/UX'],
       github: 'https://github.com/a7x3a/taskly',
       live: 'https://tasklly.vercel.app/',
@@ -121,14 +121,14 @@ const Projects = () => {
           {projects.map((project, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 60, scale: 0.9 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
               transition={{ 
-                duration: 0.7,
+                duration: 0.5,
                 delay: index * 0.1,
-                ease: [0.22, 1, 0.36, 1]
+                ease: "easeOut"
               }}
-              viewport={{ once: true, margin: "-80px", amount: 0.2 }}
+              viewport={{ once: true, margin: "0px", amount: 0.1 }}
               className="group"
             >
               <motion.div 
@@ -142,13 +142,11 @@ const Projects = () => {
               >
                 {/* Image */}
                 <div className="relative h-40 sm:h-48 overflow-hidden bg-gray-200 dark:bg-gray-700">
-                  <motion.img 
+                  <img 
                     src={project.image} 
                     alt={`${project.title} - ${project.description}`}
                     loading="lazy"
-                    className="w-full h-full object-cover"
-                    whileHover={{ scale: 1.08 }}
-                    transition={{ duration: 0.4, ease: "easeOut" }}
+                    className="w-full h-full object-cover transition-transform duration-300 ease-out group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
                 </div>

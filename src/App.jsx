@@ -7,11 +7,13 @@ import Projects from './components/Projects';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import CursorFollower from './components/CursorFollower';
+import IdleScreen from './components/IdleScreen';
 
 function App() {
   return (
     <div className="relative bg-white dark:bg-gray-900 scroll-smooth">
       <CursorFollower />
+      <IdleScreen />
       <Navbar />
       
       <motion.main

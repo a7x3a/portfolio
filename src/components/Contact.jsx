@@ -1,6 +1,7 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef, useState, useEffect } from 'react';
-import { Mail, MapPin, Phone, Send } from 'lucide-react';
+import { Mail, MapPin, Phone, Send, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
+import emailjs from '@emailjs/browser';
 import Input from './ui/Input';
 import Textarea from './ui/Textarea';
 import Button from './ui/Button';
@@ -8,6 +9,8 @@ import Button from './ui/Button';
 const Contact = () => {
   const ref = useRef(null);
   const [isDesktop, setIsDesktop] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null); // 'success' | 'error' | null
 
   useEffect(() => {
     const checkDevice = () => {
@@ -36,10 +39,113 @@ const Contact = () => {
     message: ''
   });
 
-  const handleSubmit = (e) => {
+  const [deviceInfo, setDeviceInfo] = useState({
+    ip_address: 'Fetching...',
+    device: '',
+    browser: '',
+    time: ''
+  });
+
+  useEffect(() => {
+    // Get device and browser info
+    const getDeviceInfo = () => {
+      const ua = navigator.userAgent;
+      let device = 'Desktop';
+      let browser = 'Unknown';
+
+      // Detect device
+      if (/mobile/i.test(ua)) {
+        device = 'Mobile';
+      } else if (/tablet|ipad/i.test(ua)) {
+        device = 'Tablet';
+      }
+
+      // Detect browser
+      if (ua.indexOf('Firefox') > -1) {
+        browser = 'Firefox';
+      } else if (ua.indexOf('SamsungBrowser') > -1) {
+        browser = 'Samsung Internet';
+      } else if (ua.indexOf('Opera') > -1 || ua.indexOf('OPR') > -1) {
+        browser = 'Opera';
+      } else if (ua.indexOf('Trident') > -1) {
+        browser = 'Internet Explorer';
+      } else if (ua.indexOf('Edge') > -1) {
+        browser = 'Edge';
+      } else if (ua.indexOf('Chrome') > -1) {
+        browser = 'Chrome';
+      } else if (ua.indexOf('Safari') > -1) {
+        browser = 'Safari';
+      }
+
+      return { device, browser };
+    };
+
+    // Get IP address
+    const fetchIPAddress = async () => {
+      try {
+        const response = await fetch('https://api.ipify.org?format=json');
+        const data = await response.json();
+        const info = getDeviceInfo();
+        setDeviceInfo({
+          ip_address: data.ip,
+          device: info.device,
+          browser: info.browser,
+          time: new Date().toLocaleString()
+        });
+      } catch (error) {
+        const info = getDeviceInfo();
+        setDeviceInfo({
+          ip_address: 'Unable to fetch',
+          device: info.device,
+          browser: info.browser,
+          time: new Date().toLocaleString()
+        });
+      }
+    };
+
+    fetchIPAddress();
+  }, []);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    setFormData({ name: '', email: '', message: '' });
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+
+    try {
+      // EmailJS configuration
+      const serviceId = 'service_e5h205c';
+      const templateId = 'template_uk1st7r';
+      const publicKey = 'nPMLdwo3JFiMQwEmw';
+
+      // Prepare template parameters with device info
+      const templateParams = {
+        name: formData.name,
+        email: formData.email,
+        from_email: formData.email,
+        message: formData.message,
+        ip_address: deviceInfo.ip_address,
+        device: deviceInfo.device,
+        browser: deviceInfo.browser,
+        time: new Date().toLocaleString()
+      };
+
+      // Send email using EmailJS
+      await emailjs.send(serviceId, templateId, templateParams, publicKey);
+
+      setSubmitStatus('success');
+      setFormData({ name: '', email: '', message: '' });
+      
+      // Hide success message after 5 seconds
+      setTimeout(() => setSubmitStatus(null), 5000);
+    } catch (error) {
+      console.error('Error sending email:', error);
+      setSubmitStatus('error');
+      
+      // Hide error message after 5 seconds
+      setTimeout(() => setSubmitStatus(null), 5000);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const contactInfo = [
@@ -47,16 +153,22 @@ const Contact = () => {
       icon: Mail,
       label: 'Email',
       value: 'ahmadomar6511@gmail.com',
+      action: 'mailto:ahmadomar6511@gmail.com',
+      clickable: true
     },
     {
       icon: Phone,
       label: 'Phone',
       value: '+964 776 698 6183',
+      action: 'tel:+9647766986183',
+      clickable: true
     },
     {
       icon: MapPin,
       label: 'Location',
       value: 'Sulaymaniah, Iraq',
+      action: null,
+      clickable: false
     }
   ];
 
@@ -165,11 +277,39 @@ const Contact = () => {
               variant="primary"
               size="md"
               className="w-full shadow-lg hover:shadow-xl"
-              icon={<Send className="w-4 h-4" />}
+              icon={isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
               iconPosition="right"
+              disabled={isSubmitting}
             >
-              Send Message
+              {isSubmitting ? 'Sending...' : 'Send Message'}
             </Button>
+
+            {/* Status Messages */}
+            {submitStatus === 'success' && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="flex items-center gap-2 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg"
+              >
+                <CheckCircle className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0" />
+                <p className="text-sm font-medium text-green-800 dark:text-green-300">
+                  Message sent successfully! I'll get back to you soon.
+                </p>
+              </motion.div>
+            )}
+
+            {submitStatus === 'error' && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="flex items-center gap-2 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg"
+              >
+                <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 flex-shrink-0" />
+                <p className="text-sm font-medium text-red-800 dark:text-red-300">
+                  Failed to send message. Please try again or contact me directly.
+                </p>
+              </motion.div>
+            )}
           </form>
 
           {/* Contact Info */}
@@ -178,28 +318,62 @@ const Contact = () => {
               Or reach me directly at
             </p>
             <div className="space-y-4">
-              {contactInfo.map((info, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  viewport={{ once: true, amount: 0.5 }}
-                  className="flex items-center gap-4 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
-                >
-                  <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary-100 dark:bg-primary-900/30 flex items-center justify-center">
-                    <info.icon className="w-5 h-5 text-primary-600 dark:text-primary-400" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-0.5">
-                      {info.label}
-                    </div>
-                    <div className="text-sm font-semibold text-gray-900 dark:text-white truncate">
-                      {info.value}
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
+              {contactInfo.map((info, index) => {
+                const Wrapper = info.clickable ? 'a' : 'div';
+                const wrapperProps = info.clickable
+                  ? { href: info.action, target: info.label === 'Email' ? '_blank' : undefined, rel: info.label === 'Email' ? 'noopener noreferrer' : undefined }
+                  : {};
+
+                return (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    viewport={{ once: true, amount: 0.5 }}
+                  >
+                    <Wrapper
+                      {...wrapperProps}
+                      className={`flex items-center gap-4 p-3 rounded-lg transition-all ${
+                        info.clickable
+                          ? 'hover:bg-primary-50 dark:hover:bg-primary-900/20 hover:border-primary-300 dark:hover:border-primary-700 border border-transparent cursor-pointer group'
+                          : 'hover:bg-gray-50 dark:hover:bg-gray-800/50'
+                      }`}
+                    >
+                      <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
+                        info.clickable
+                          ? 'bg-primary-100 dark:bg-primary-900/30 group-hover:bg-primary-200 dark:group-hover:bg-primary-900/50'
+                          : 'bg-primary-100 dark:bg-primary-900/30'
+                      }`}>
+                        <info.icon className={`w-5 h-5 transition-transform ${
+                          info.clickable
+                            ? 'text-primary-600 dark:text-primary-400 group-hover:scale-110'
+                            : 'text-primary-600 dark:text-primary-400'
+                        }`} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-0.5">
+                          {info.label}
+                        </div>
+                        <div className={`text-sm font-semibold truncate transition-colors ${
+                          info.clickable
+                            ? 'text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400'
+                            : 'text-gray-900 dark:text-white'
+                        }`}>
+                          {info.value}
+                        </div>
+                      </div>
+                      {info.clickable && (
+                        <div className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <svg className="w-4 h-4 text-primary-600 dark:text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        </div>
+                      )}
+                    </Wrapper>
+                  </motion.div>
+                );
+              })}
             </div>
           </div>
         </motion.div>

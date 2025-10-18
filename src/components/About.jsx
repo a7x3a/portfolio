@@ -105,14 +105,14 @@ const About = () => {
             {highlights.map((item, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, x: 50, scale: 0.95 }}
-                whileInView={{ opacity: 1, x: 0, scale: 1 }}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
                 transition={{ 
                   duration: 0.6,
                   delay: index * 0.15,
-                  ease: [0.22, 1, 0.36, 1]
+                  ease: "easeOut"
                 }}
-                viewport={{ once: true, margin: "-80px", amount: 0.4 }}
+                viewport={{ once: true, margin: "-50px", amount: 0.2 }}
                 whileHover={{ 
                   y: -4,
                   scale: 1.02,
